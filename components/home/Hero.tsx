@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export function Hero() {
+export function Hero({ isReady = true }: { isReady?: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     const [activeWordIndex, setActiveWordIndex] = useState<number | null>(null);
@@ -141,23 +141,31 @@ export function Hero() {
     };
 
     useEffect(() => {
+        if (!isReady) return;
+
         const ctx = gsap.context(() => {
-            const tl = gsap.timeline({ delay: 0.5 });
+            const tl = gsap.timeline({ delay: 0.1 });
             tl.fromTo(".word",
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.8, stagger: 0.03, ease: "power3.out" }
+                { y: 50, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.5, stagger: 0.08, ease: "power4.out" }
+            );
+
+            // Subtext animation
+            gsap.fromTo(".hero-sub",
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.2, delay: 0.8, ease: "power3.out" }
             );
         }, containerRef);
         return () => ctx.revert();
-    }, []);
+    }, [isReady]);
 
     return (
         <section
             ref={containerRef}
-            className="min-h-screen flex flex-col justify-center px-6 md:px-20 py-32 relative overflow-hidden"
+            className="min-h-[100dvh] flex flex-col justify-center items-center px-6 md:px-20 py-24 md:py-32 relative overflow-hidden text-center"
         >
-            <div className="max-w-[90vw] md:max-w-6xl">
-                <h1 className="text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.2] font-bold tracking-tight text-gray-200 group/sentence cursor-default select-none transition-colors duration-300">
+            <div className="max-w-[90vw] md:max-w-6xl flex flex-col items-center">
+                <h1 className="text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.2] font-bold tracking-tight text-gray-200 group/sentence cursor-default select-none transition-colors duration-300 text-center">
                     {sentence.map((item, i) => {
                         const isThisActive = i === activeWordIndex;
                         const isAnyActive = activeWordIndex !== null;
@@ -183,18 +191,17 @@ export function Hero() {
                             >
                                 {/* 
                   Refined 3D Pill Background 
-                  - Gradient: from-neutral-800 to-neutral-950 (Subtle depth)
-                  - Shadows: Deep drop shadow + Subtle inner white gloss (top edge)
-                  - Border: Thin white/10
+                  - Gradient: from-violet-950 via-indigo-950 to-blue-950 (Holographic Dark)
+                  - Shadows: Deep drop shadow + Subtle inner white gloss
                 */}
                                 {item.interactive && (
                                     <span
                                         ref={el => { bgRefs.current[i] = el }}
                                         className={cn(
                                             "absolute inset-0 -m-1 md:-mx-4 md:-my-2 rounded-full opacity-0 origin-center pointer-events-none",
-                                            "bg-gradient-to-br from-neutral-800 to-neutral-950",
-                                            "border border-white/10",
-                                            "shadow-[0_15px_30px_-5px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)]"
+                                            "bg-gradient-to-br from-violet-950 via-indigo-950 to-blue-950",
+                                            "border border-white/10 ring-1 ring-white/10",
+                                            "shadow-[0_15px_30px_-5px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.2),0_0_30px_-10px_rgba(139,92,246,0.3)]"
                                         )}
                                         style={{ zIndex: -1, transform: 'scale(0.8) perspective(500px) rotateX(10deg)' }}
                                     />
@@ -211,7 +218,7 @@ export function Hero() {
                                 {/* Word Text */}
                                 <span
                                     ref={el => { wordRefs.current[i] = el }}
-                                    className="word inline-block relative text-inherit"
+                                    className="word inline-block relative text-inherit opacity-0"
                                 >
                                     {item.text}
                                 </span>
@@ -220,7 +227,7 @@ export function Hero() {
                     })}
                 </h1>
 
-                <div className="mt-16 overflow-hidden">
+                <div className="mt-12 md:mt-16 overflow-hidden">
                     <p className="hero-sub text-lg md:text-xl text-gray-400 max-w-2xl font-light opacity-0 animate-fade-in-up" style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}>
                         Full-Stack Developer focused on meaningful motion and real-world impact.
                     </p>

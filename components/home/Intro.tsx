@@ -81,13 +81,13 @@ export function Intro({ onComplete }: { onComplete: () => void }) {
                 <path
                     ref={svgRef}
                     d="M0 0 L100 0 L100 100 Q50 100 0 100 Z"
-                    className="fill-gray-400"
+                    className="fill-[#0a0a0a]"
                 />
             </svg>
 
             {/* Wrapper to animate everything out together */}
             <div ref={textContainerRef} className="relative z-10 flex items-center gap-6 md:gap-8 origin-bottom">
-                <div className="w-[2px] h-12 md:h-20 bg-black/30 rounded-full" />
+                <div className="w-[2px] h-12 md:h-20 bg-white/30 rounded-full" />
 
                 <div className="h-[60px] md:h-[100px] overflow-hidden relative">
                     <div ref={reelRef} className="flex flex-col">
@@ -96,7 +96,7 @@ export function Intro({ onComplete }: { onComplete: () => void }) {
                                 key={word}
                                 className="h-[60px] md:h-[100px] flex items-center"
                             >
-                                <span className="text-5xl md:text-8xl font-sans font-light tracking-tight text-black whitespace-nowrap">
+                                <span className="text-5xl md:text-8xl font-sans font-light tracking-tight text-white whitespace-nowrap">
                                     {word}
                                 </span>
                             </div>
