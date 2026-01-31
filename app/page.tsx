@@ -7,9 +7,13 @@ import { Projects } from '@/components/home/Projects';
 import { About } from '@/components/home/About';
 import { Contact } from '@/components/home/Contact';
 import { Footer } from '@/components/layout/Footer';
+import { useAnimatedTabTitle } from '@/hooks/useAnimatedTabTitle';
 
 export default function Home() {
   const [introFinished, setIntroFinished] = useState(false);
+
+  // Initialize tab animation
+  useAnimatedTabTitle();
 
   return (
     <main className={`relative ${introFinished ? '' : 'overflow-hidden'}`}>

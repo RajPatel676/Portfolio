@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()";
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -44,8 +44,8 @@ export function Hero() {
 
             gsap.killTweensOf([el, bg, line]);
 
-            // 1. Scramble Logic with Ease
-            const duration = 0.6; // Slightly slower for readability
+            // 1. Text Animation (Clean Charset, Smooth Ease)
+            const duration = 0.5;
             const scrambleObj = { value: 0 };
             const originalText = word;
             const length = originalText.length;
@@ -53,7 +53,7 @@ export function Hero() {
             gsap.to(scrambleObj, {
                 value: 1,
                 duration: duration,
-                ease: "power2.out", // Decelerate the scramble
+                ease: "expo.out",
                 onUpdate: () => {
                     const progress = scrambleObj.value;
                     const revealIndices = Math.floor(progress * length);
@@ -72,8 +72,7 @@ export function Hero() {
                 }
             });
 
-            // 2. 3D Pill Reveal - Smooth Liquid Expansion
-            // Switched from 'back.out' (bouncy) to 'expo.out' (luxurious smoothness)
+            // 2. 3D Pill Reveal (Rich Material Expansion)
             gsap.to(bg, {
                 scale: 1,
                 opacity: 1,
@@ -88,13 +87,13 @@ export function Hero() {
                 duration: 0.2
             });
 
-            // 4. Word Lift - Precise Control
+            // 4. Word Lift
             gsap.to(el, {
                 y: -4,
                 scale: 1.1,
                 color: "#ffffff",
                 duration: 0.5,
-                ease: "expo.out" // Matches pill
+                ease: "expo.out"
             });
         }
     };
@@ -112,7 +111,7 @@ export function Hero() {
 
             el.innerText = word;
 
-            // Hide Pill - Smooth Disappear
+            // Hide Pill
             gsap.to(bg, {
                 scale: 0.8,
                 opacity: 0,
@@ -168,11 +167,9 @@ export function Hero() {
                                 key={i}
                                 className={cn(
                                     "relative inline-block mr-[0.25em]",
-                                    // REMOVED 'transition-all' to prevent fighting GSAP on transform/scale
-                                    // We only want CSS transitions for Opacity and Blur
                                     "transition-[opacity,filter] duration-500 ease-out",
 
-                                    // LOGIC 2: General Hover (No specific word active)
+                                    // LOGIC 2: General Hover
                                     !isAnyActive && !item.interactive && "group-hover/sentence:opacity-40 group-hover/sentence:blur-[1px]",
                                     !isAnyActive && item.interactive && "group-hover/sentence:opacity-100 group-hover/sentence:scale-[1.02]",
 
@@ -184,11 +181,21 @@ export function Hero() {
                                 onMouseLeave={() => handleMouseLeave(i, item.text, item.interactive)}
                                 style={{ cursor: item.interactive ? 'pointer' : 'default' }}
                             >
-                                {/* 3D Pill Background */}
+                                {/* 
+                  Refined 3D Pill Background 
+                  - Gradient: from-neutral-800 to-neutral-950 (Subtle depth)
+                  - Shadows: Deep drop shadow + Subtle inner white gloss (top edge)
+                  - Border: Thin white/10
+                */}
                                 {item.interactive && (
                                     <span
                                         ref={el => { bgRefs.current[i] = el }}
-                                        className="absolute inset-0 -m-1 md:-mx-4 md:-my-2 bg-neutral-900 rounded-full opacity-0 origin-center pointer-events-none shadow-[0_10px_30px_-5px_rgba(0,0,0,0.8),0_0_15px_rgba(255,255,255,0.1)] border border-white/10"
+                                        className={cn(
+                                            "absolute inset-0 -m-1 md:-mx-4 md:-my-2 rounded-full opacity-0 origin-center pointer-events-none",
+                                            "bg-gradient-to-br from-neutral-800 to-neutral-950",
+                                            "border border-white/10",
+                                            "shadow-[0_15px_30px_-5px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)]"
+                                        )}
                                         style={{ zIndex: -1, transform: 'scale(0.8) perspective(500px) rotateX(10deg)' }}
                                     />
                                 )}
