@@ -36,7 +36,7 @@ const EXPERTISE_ITEMS = [
 
 export function Expertise() {
     return (
-        <section id="work" className="py-24 md:py-32 bg-background text-foreground overflow-hidden">
+        <section id="work" className="py-24 md:py-32 text-foreground overflow-hidden relative">
 
             {/* Header */}
             <div className="px-6 md:px-20 mb-16 md:mb-24">

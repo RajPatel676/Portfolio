@@ -8,6 +8,7 @@ import { About } from '@/components/home/About';
 import { Contact } from '@/components/home/Contact';
 import { Footer } from '@/components/layout/Footer';
 import { useAnimatedTabTitle } from '@/hooks/useAnimatedTabTitle';
+import { ScrollLineAnimation } from '@/components/ui/svg-follow-scroll';
 
 export default function Home() {
   const [introFinished, setIntroFinished] = useState(false);
@@ -16,19 +17,24 @@ export default function Home() {
   useAnimatedTabTitle();
 
   return (
-    <main className={`relative ${introFinished ? '' : 'overflow-hidden'}`}>
+    <main className="relative">
       {!introFinished && (
         <Intro
           onComplete={() => setIntroFinished(true)}
         />
       )}
 
-      <div className="flex flex-col">
-        <Hero isReady={introFinished} />
-        <Expertise />
-        <About />
-        <Contact />
-        <Footer />
+      <div className="flex flex-col relative">
+        <div className="absolute inset-0 z-0 h-full w-full pointer-events-none">
+          <ScrollLineAnimation />
+        </div>
+        <div className="relative z-10">
+          <Hero isReady={introFinished} />
+          <Expertise />
+          <About />
+          <Contact />
+          <Footer />
+        </div>
       </div>
     </main>
   );

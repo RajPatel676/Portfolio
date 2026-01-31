@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export function Contact() {
     return (
-        <section id="contact" className="py-32 px-6 md:px-20 bg-background min-h-[50vh] flex flex-col justify-between">
+        <section id="contact" className="py-32 px-6 md:px-20 min-h-[50vh] flex flex-col justify-between">
             <div>
                 <h2 className="text-[3rem] md:text-[6rem] leading-none font-bold tracking-tighter mb-10">
                     Let&apos;s build <br /> something <span className="text-gray-500">meaningful.</span>

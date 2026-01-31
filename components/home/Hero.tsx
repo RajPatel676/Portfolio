@@ -220,7 +220,7 @@ export function Hero({ isReady = true }: { isReady?: boolean }) {
                                 {item.interactive && (
                                     <span
                                         ref={el => { lineRefs.current[i] = el }}
-                                        className="hero-line absolute bottom-0 left-0 w-full h-[2px] bg-gray-500/50 opacity-100 origin-left pointer-events-none mb-1 md:mb-2 transition-opacity"
+                                        className="hero-line absolute bottom-0 left-0 w-full h-[2px] bg-gray-500/50 opacity-100 scale-x-0 origin-left pointer-events-none mb-1 md:mb-2 transition-opacity"
                                     />
                                 )}
 

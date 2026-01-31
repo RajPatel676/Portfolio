@@ -19,6 +19,10 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
         if (pathname === '/') return; // Skip transition for home (Intro handles it)
 
         const ctx = gsap.context(() => {
+            // Lock scroll during transition
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             const curved = "M0 0 L100 0 L100 50 Q50 100 0 50 Z";
             const topFlat = "M0 0 L100 0 L100 0 Q50 0 0 0 Z";
             const full = "M0 0 L100 0 L100 100 Q50 100 0 100 Z";
@@ -27,7 +31,14 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             gsap.set(svgRef.current, { attr: { d: full } });
             gsap.set(textRef.current, { opacity: 1, y: 0 });
 
-            const tl = gsap.timeline();
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    // Unlock scroll when transition finishes
+                    document.body.style.overflow = '';
+                    document.documentElement.style.overflow = '';
+                    gsap.set(containerRef.current, { display: 'none' });
+                }
+            });
 
             // 1. Text Entry (Already visible mostly, but let's ensure it lingers)
             tl.to({}, { duration: 0.5 });
@@ -52,12 +63,14 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
                     ease: "power2.out"
                 }, ">-0.1");
 
-            // Cleanup: Hide container to prevent clicks
-            tl.set(containerRef.current, { display: 'none' });
-
         }, containerRef);
 
-        return () => ctx.revert();
+        return () => {
+            ctx.revert();
+            // Safety unlock
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
     }, [pathname]);
 
     // If Home, render children directly (Intro handles animation)

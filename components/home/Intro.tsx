@@ -23,15 +23,21 @@ export function Intro({ onComplete }: { onComplete: () => void }) {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({
                 onComplete: () => {
+                    document.body.style.overflow = '';
+                    document.documentElement.style.overflow = '';
                     onComplete();
                 },
             });
 
+            // Lock scroll on mount (Body + HTML for max compatibility)
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             const curved = "M0 0 L100 0 L100 50 Q50 100 0 50 Z";
             const topFlat = "M0 0 L100 0 L100 0 Q50 0 0 0 Z";
 
-            const stepDuration = 0.25;
-            const pauseDuration = 0.15;
+            const stepDuration = 0.2; // Was 0.25
+            const pauseDuration = 0.1; // Was 0.15
 
             // Animate Reel
             words.forEach((_, i) => {
@@ -45,31 +51,34 @@ export function Intro({ onComplete }: { onComplete: () => void }) {
                     .to({}, { duration: pauseDuration });
             });
 
-            tl.to({}, { duration: 0.3 }); // Linger last word
+            tl.to({}, { duration: 0.2 }); // Linger last word (Was 0.3)
 
             // Exit Logic: Fade out text AND structure
             tl.to(textContainerRef.current, {
                 y: -100,
                 opacity: 0,
-                duration: 0.5,
+                duration: 0.4, // Was 0.5
                 ease: "power2.in"
             }, "exit"); // Label 'exit'
 
             // Curtain Reveal Sync
             tl.to(svgRef.current, {
                 attr: { d: curved },
-                duration: 0.8,
+                duration: 0.6, // Was 0.8
                 ease: "power2.in"
             }, "exit-=0.1")
                 .to(svgRef.current, {
                     attr: { d: topFlat },
-                    duration: 0.8,
+                    duration: 0.6, // Was 0.8
                     ease: "power2.out"
                 }, ">-0.1");
 
         }, containerRef);
 
-        return () => ctx.revert();
+        return () => {
+            ctx.revert();
+            document.body.style.overflow = '';
+        };
     }, [words.length]);
 
     return (
