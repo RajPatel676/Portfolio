@@ -12,7 +12,7 @@ interface HoverSliderImageProps {
     index: number
     imageUrl: string
 }
-interface HoverSliderProps { }
+
 interface HoverSliderContextValue {
     activeSlide: number
     changeSlide: (index: number) => void
@@ -42,7 +42,7 @@ function useHoverSliderContext() {
 
 export const HoverSlider = React.forwardRef<
     HTMLElement,
-    React.HTMLAttributes<HTMLElement> & HoverSliderProps
+    React.HTMLAttributes<HTMLElement>
 >(({ children, className, ...props }, ref) => {
     const [activeSlide, setActiveSlide] = React.useState<number>(0)
     const changeSlide = React.useCallback(
@@ -57,20 +57,7 @@ export const HoverSlider = React.forwardRef<
 })
 HoverSlider.displayName = "HoverSlider"
 
-const WordStaggerHover = React.forwardRef<
-    HTMLSpanElement,
-    React.HTMLAttributes<HTMLSpanElement>
->(({ children, className, ...props }, ref) => {
-    return (
-        <span
-            className={cn("relative inline-block origin-bottom overflow-hidden")}
-            {...props}
-        >
-            {children}
-        </span>
-    )
-})
-WordStaggerHover.displayName = "WordStaggerHover"
+
 
 export const TextStaggerHover = React.forwardRef<
     HTMLElement,
@@ -155,10 +142,11 @@ HoverSliderImageWrap.displayName = "HoverSliderImageWrap"
 export const HoverSliderImage = React.forwardRef<
     HTMLImageElement,
     HTMLMotionProps<"img"> & HoverSliderImageProps
->(({ index, imageUrl, children, className, ...props }, ref) => {
+>(({ index, imageUrl, className, ...props }, ref) => {
     const { activeSlide } = useHoverSliderContext()
     return (
         <motion.img
+            src={imageUrl}
             className={cn("inline-block align-middle", className)}
             transition={{ ease: [0.33, 1, 0.68, 1], duration: 0.8 }}
             variants={clipPathVariants}

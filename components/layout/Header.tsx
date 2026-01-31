@@ -1,14 +1,30 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export function Header() {
     const containerRef = useRef<HTMLElement>(null);
     const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
     const underlineRef = useRef<HTMLDivElement>(null);
     const logoText = "Raj Patel";
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            if (scrollY > 100) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
@@ -79,7 +95,10 @@ export function Header() {
     return (
         <header
             ref={containerRef}
-            className="fixed top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-50 mix-blend-difference text-white pointer-events-none"
+            className={cn(
+                "fixed top-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-50 mix-blend-difference text-white pointer-events-none transition-transform duration-500 ease-in-out",
+                !isVisible && "-translate-y-full"
+            )}
         >
             <div className="pointer-events-auto">
                 <Link

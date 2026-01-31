@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { Cursor } from "@/components/ui/Cursor";
 import { Header } from "@/components/layout/Header";
+import { FloatingNav } from "@/components/layout/FloatingNav";
 import { cn } from "@/lib/utils";
 
 const outfit = Outfit({
@@ -33,6 +34,7 @@ export default function RootLayout({
         <SmoothScroll>
           <Cursor />
           <Header />
+          <FloatingNav />
           {children}
         </SmoothScroll>
       </body>
