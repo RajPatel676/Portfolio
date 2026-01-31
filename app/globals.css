@@ -2,8 +2,10 @@
 
 @theme {
   --font-sans: var(--font-outfit);
-  --color-background: #0a0a0a; /* Dark theme default as requested */
+  --color-background: #0a0a0a;
+  /* Dark theme default as requested */
   --color-foreground: #ededed;
+  /* --color-foreground: #ffffff; */
 }
 
 /* Custom Utilities */
@@ -21,7 +23,8 @@ body {
 }
 
 /* Lenis Recommended */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 

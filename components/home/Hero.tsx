@@ -165,7 +165,7 @@ export function Hero({ isReady = true }: { isReady?: boolean }) {
             className="min-h-[100dvh] flex flex-col justify-center items-center px-6 md:px-20 py-24 md:py-32 relative overflow-hidden text-center"
         >
             <div className="max-w-[90vw] md:max-w-6xl flex flex-col items-center">
-                <h1 className="text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.2] font-bold tracking-tight text-gray-200 group/sentence cursor-default select-none transition-colors duration-300 text-center">
+                <h1 className="text-[2.5rem] md:text-[4.5rem] lg:text-[5.5rem] leading-[1.2] font-bold tracking-tight text-white group/sentence cursor-default select-none transition-colors duration-300 text-center">
                     {sentence.map((item, i) => {
                         const isThisActive = i === activeWordIndex;
                         const isAnyActive = activeWordIndex !== null;
