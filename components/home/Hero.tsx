@@ -145,9 +145,18 @@ export function Hero({ isReady = true }: { isReady?: boolean }) {
 
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ delay: 0.1 });
+
+            // 1. Animate Words First
             tl.fromTo(".word",
                 { y: 50, opacity: 0 },
                 { y: 0, opacity: 1, duration: 1.5, stagger: 0.08, ease: "power4.out" }
+            );
+
+            // 2. Animate Underlines After
+            tl.fromTo(".hero-line",
+                { scaleX: 0 },
+                { scaleX: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" },
+                "-=1.0" // Start 1.0s before words finish (overlap)
             );
 
             // Subtext animation
@@ -211,7 +220,7 @@ export function Hero({ isReady = true }: { isReady?: boolean }) {
                                 {item.interactive && (
                                     <span
                                         ref={el => { lineRefs.current[i] = el }}
-                                        className="absolute bottom-0 left-0 w-full h-[2px] bg-gray-500/50 opacity-100 origin-left pointer-events-none mb-1 md:mb-2 transition-opacity"
+                                        className="hero-line absolute bottom-0 left-0 w-full h-[2px] bg-gray-500/50 opacity-100 origin-left pointer-events-none mb-1 md:mb-2 transition-opacity"
                                     />
                                 )}
 

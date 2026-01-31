@@ -129,7 +129,7 @@ export function Header() {
             <nav className="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest pointer-events-auto">
                 <Link href="#work" className="cursor-hover hover:opacity-70 transition-opacity">Expertise</Link>
                 <Link href="#about" className="cursor-hover hover:opacity-70 transition-opacity">About</Link>
-                <Link href="#contact" className="cursor-hover hover:opacity-70 transition-opacity">Contact</Link>
+                <Link href="/contact" className="cursor-hover hover:opacity-70 transition-opacity">Contact</Link>
             </nav>
 
             <div className="md:hidden pointer-events-auto">
