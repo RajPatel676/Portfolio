@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 import { Cursor } from "@/components/ui/Cursor";
 import { Header } from "@/components/layout/Header";
+import { DynamicTitle } from "@/components/ui/DynamicTitle";
 import { cn } from "@/lib/utils";
 
 const outfit = Outfit({
@@ -31,6 +32,7 @@ export default function RootLayout({
         )}
       >
         <SmoothScroll>
+          <DynamicTitle />
           <Cursor />
           <Header />
           {children}

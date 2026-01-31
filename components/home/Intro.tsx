@@ -5,8 +5,19 @@ import gsap from 'gsap';
 
 export function Intro({ onComplete }: { onComplete: () => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const wordsRef = useRef<(HTMLDivElement | null)[]>([]);
-    const words = ["Hello", "Namaste", "Bonjour"];
+    const reelRef = useRef<HTMLDivElement>(null);
+    const textContainerRef = useRef<HTMLDivElement>(null); // New ref for the wrapper
+    const svgRef = useRef<SVGPathElement>(null);
+
+    const words = [
+        "Hello",           // English
+        "नमस्ते",          // Hindi
+        "નમસ્તે",          // Gujarati
+        "नमस्कार",        // Marathi
+        "வணக்கம்",      // Tamil
+        "నమస్కారం",      // Telugu
+        "নমস্কার"          // Bengali
+    ];
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
@@ -16,51 +27,82 @@ export function Intro({ onComplete }: { onComplete: () => void }) {
                 },
             });
 
-            // Filter out nulls to be safe
-            const els = wordsRef.current;
-            if (!els[0] || !els[1] || !els[2]) return;
+            const curved = "M0 0 L100 0 L100 50 Q50 100 0 50 Z";
+            const topFlat = "M0 0 L100 0 L100 0 Q50 0 0 0 Z";
 
-            // Set initial state
-            gsap.set(els, { y: 20, opacity: 0 });
+            const stepDuration = 0.25;
+            const pauseDuration = 0.15;
 
-            // Animate words cycle
-            tl.to(els[0], { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" })
-                .to(els[0], { opacity: 0, y: -20, duration: 0.6, ease: "power3.in" }, "+=0.4")
+            // Animate Reel
+            words.forEach((_, i) => {
+                if (i === 0) return;
 
-                .to(els[1], { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.2")
-                .to(els[1], { opacity: 0, y: -20, duration: 0.6, ease: "power3.in" }, "+=0.4")
+                tl.to(reelRef.current, {
+                    yPercent: -(i * 100 / words.length),
+                    duration: stepDuration,
+                    ease: "back.out(1.2)",
+                })
+                    .to({}, { duration: pauseDuration });
+            });
 
-                .to(els[2], { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.2")
-                .to(els[2], { opacity: 0, y: -20, duration: 0.6, ease: "power3.in" }, "+=0.4")
+            tl.to({}, { duration: 0.3 }); // Linger last word
 
-                // Curtain transition
-                .to(containerRef.current, {
-                    yPercent: -100,
-                    duration: 1.2,
-                    ease: "expo.inOut"
-                }, "-=0.2");
+            // Exit Logic: Fade out text AND structure
+            tl.to(textContainerRef.current, {
+                y: -100,
+                opacity: 0,
+                duration: 0.5,
+                ease: "power2.in"
+            }, "exit"); // Label 'exit'
+
+            // Curtain Reveal Sync
+            tl.to(svgRef.current, {
+                attr: { d: curved },
+                duration: 0.8,
+                ease: "power2.in"
+            }, "exit-=0.1")
+                .to(svgRef.current, {
+                    attr: { d: topFlat },
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, ">-0.1");
 
         }, containerRef);
 
         return () => ctx.revert();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [words.length]);
 
     return (
         <div
             ref={containerRef}
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-gray-400 text-black"
+            className="fixed inset-0 z-[999] flex items-center justify-center pointer-events-none bg-transparent"
         >
-            <div className="grid grid-cols-1 place-items-center h-24 w-full overflow-hidden">
-                {words.map((word, i) => (
-                    <div
-                        key={word}
-                        ref={el => { wordsRef.current[i] = el }}
-                        className="col-start-1 row-start-1 text-5xl md:text-7xl font-sans font-light tracking-wide text-center whitespace-nowrap opacity-0 text-black"
-                    >
-                        {word}
+            <svg className="absolute inset-0 w-full h-[120%] -top-[20%] z-0" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <path
+                    ref={svgRef}
+                    d="M0 0 L100 0 L100 100 Q50 100 0 100 Z"
+                    className="fill-gray-400"
+                />
+            </svg>
+
+            {/* Wrapper to animate everything out together */}
+            <div ref={textContainerRef} className="relative z-10 flex items-center gap-6 md:gap-8 origin-bottom">
+                <div className="w-[2px] h-12 md:h-20 bg-black/30 rounded-full" />
+
+                <div className="h-[60px] md:h-[100px] overflow-hidden relative">
+                    <div ref={reelRef} className="flex flex-col">
+                        {words.map((word) => (
+                            <div
+                                key={word}
+                                className="h-[60px] md:h-[100px] flex items-center"
+                            >
+                                <span className="text-5xl md:text-8xl font-sans font-light tracking-tight text-black whitespace-nowrap">
+                                    {word}
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
         </div>
     );
